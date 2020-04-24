@@ -49,7 +49,7 @@ static inline void* cpu_ll_get_sp(void)
 
 static inline void cpu_ll_init_hwloop(void)
 {
-#if XCHAL_ERRATUM_572
+#ifdef XCHAL_ERRATUM_572
     uint32_t memctl = XCHAL_CACHE_MEMCTL_DEFAULT;
     WSR(MEMCTL, memctl);
 #endif // XCHAL_ERRATUM_572
@@ -110,7 +110,7 @@ static inline void cpu_ll_set_watchpoint(int id,
 
     //We support watching 2^n byte values, from 1 to 64. Calculate the mask for that.
     for (int x = 0; x < 7; x++) {
-        if (size == (1 << x)) {
+        if (size == (1u << x)) {
             break;
         }
         dbreakc <<= 1;

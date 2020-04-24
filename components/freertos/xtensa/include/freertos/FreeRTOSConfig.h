@@ -120,9 +120,9 @@ int xt_clock_freq(void) __attribute__((deprecated));
 /* configASSERT behaviour */
 #ifndef __ASSEMBLER__
 #include <stdlib.h> /* for abort() */
-#if CONFIG_IDF_TARGET_ESP32
+#if defined(CONFIG_IDF_TARGET_ESP32)
 #include "esp32/rom/ets_sys.h"
-#elif CONFIG_IDF_TARGET_ESP32S2
+#elif defined(CONFIG_IDF_TARGET_ESP32S2)
 #include "esp32s2/rom/ets_sys.h"
 #endif
 
@@ -235,11 +235,11 @@ int xt_clock_freq(void) __attribute__((deprecated));
 #define configUSE_RECURSIVE_MUTEXES		1
 #define configUSE_COUNTING_SEMAPHORES	1
 
-#if CONFIG_FREERTOS_CHECK_STACKOVERFLOW_NONE
+#if defined CONFIG_FREERTOS_CHECK_STACKOVERFLOW_NONE
 #define configCHECK_FOR_STACK_OVERFLOW	0
-#elif CONFIG_FREERTOS_CHECK_STACKOVERFLOW_PTRVAL
+#elif defined CONFIG_FREERTOS_CHECK_STACKOVERFLOW_PTRVAL
 #define configCHECK_FOR_STACK_OVERFLOW	1
-#elif CONFIG_FREERTOS_CHECK_STACKOVERFLOW_CANARY
+#elif defined CONFIG_FREERTOS_CHECK_STACKOVERFLOW_CANARY
 #define configCHECK_FOR_STACK_OVERFLOW	2
 #endif
 
@@ -282,7 +282,7 @@ int xt_clock_freq(void) __attribute__((deprecated));
 #define configSUPPORT_STATIC_ALLOCATION CONFIG_FREERTOS_SUPPORT_STATIC_ALLOCATION
 
 #ifndef __ASSEMBLER__
-#if CONFIG_FREERTOS_ENABLE_STATIC_TASK_CLEAN_UP
+#ifdef CONFIG_FREERTOS_ENABLE_STATIC_TASK_CLEAN_UP
 extern void vPortCleanUpTCB ( void *pxTCB );
 #define portCLEAN_UP_TCB( pxTCB )           vPortCleanUpTCB( pxTCB )
 #endif
@@ -299,6 +299,10 @@ extern void vPortCleanUpTCB ( void *pxTCB );
 #define INCLUDE_eTaskGetState               1
 #define configUSE_QUEUE_SETS                1
 
+#ifndef CONFIG_FREERTOS_USE_TICKLESS_IDLE
+#define CONFIG_FREERTOS_USE_TICKLESS_IDLE 0
+#endif
+
 #define configUSE_TICKLESS_IDLE             CONFIG_FREERTOS_USE_TICKLESS_IDLE
 #if configUSE_TICKLESS_IDLE
 #define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   CONFIG_FREERTOS_IDLE_TIME_BEFORE_SLEEP
@@ -307,14 +311,14 @@ extern void vPortCleanUpTCB ( void *pxTCB );
 #define configXT_BOARD                      1   /* Board mode */
 #define configXT_SIMULATOR					0
 
-#if CONFIG_ESP32_ENABLE_COREDUMP
+#ifdef CONFIG_ESP32_ENABLE_COREDUMP
 #define configENABLE_TASK_SNAPSHOT          1
 #endif
 #ifndef configENABLE_TASK_SNAPSHOT
 #define configENABLE_TASK_SNAPSHOT          1
 #endif
 
-#if CONFIG_SYSVIEW_ENABLE
+#ifdef CONFIG_SYSVIEW_ENABLE
 #ifndef __ASSEMBLER__
 #include "SEGGER_SYSVIEW_FreeRTOS.h"
 #undef INLINE // to avoid redefinition
