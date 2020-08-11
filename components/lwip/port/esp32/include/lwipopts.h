@@ -255,7 +255,7 @@
  * CONFIG_LWIP_DHCP_RESTORE_LAST_IP==1: Last valid IP address obtained from DHCP server
  * is restored after reset/power-up.
  */
-#if CONFIG_LWIP_DHCP_RESTORE_LAST_IP
+#ifdef CONFIG_LWIP_DHCP_RESTORE_LAST_IP
 
 #define LWIP_DHCP_IP_ADDR_RESTORE()     dhcp_ip_addr_restore(netif)
 #define LWIP_DHCP_IP_ADDR_STORE()       dhcp_ip_addr_store(netif)
@@ -613,12 +613,16 @@
 /**
  * LWIP_SO_LINGER==1: Enable SO_LINGER processing.
  */
+#ifdef CONFIG_LWIP_SO_LINGER
 #define LWIP_SO_LINGER                  CONFIG_LWIP_SO_LINGER
+#endif
 
 /**
  * LWIP_SO_RCVBUF==1: Enable SO_RCVBUF processing.
  */
+#ifdef CONFIG_LWIP_SO_RCVBUF
 #define LWIP_SO_RCVBUF                  CONFIG_LWIP_SO_RCVBUF
+#endif
 
 /**
  * SO_REUSE==1: Enable SO_REUSEADDR option.
@@ -643,7 +647,9 @@
  * LWIP_NETBUF_RECVINFO==1: Enable IP_PKTINFO option.
  * This option is set via menuconfig.
  */
+#ifdef CONFIG_LWIP_NETBUF_RECVINFO
 #define LWIP_NETBUF_RECVINFO            CONFIG_LWIP_NETBUF_RECVINFO
+#endif
 
 /*
    ----------------------------------------
@@ -654,9 +660,11 @@
 /**
  * LWIP_STATS==1: Enable statistics collection in lwip_stats.
  */
+#ifdef CONFIG_LWIP_STATS
 #define LWIP_STATS                      CONFIG_LWIP_STATS
+#endif
 
-#if LWIP_STATS
+#ifdef LWIP_STATS
 
 /**
  * LWIP_STATS_DISPLAY==1: Compile in the statistics output functions.
@@ -674,9 +682,11 @@
 /**
  * PPP_SUPPORT==1: Enable PPP.
  */
+#ifdef CONFIG_LWIP_PPP_SUPPORT
 #define PPP_SUPPORT                     CONFIG_LWIP_PPP_SUPPORT
+#endif
 
-#if PPP_SUPPORT
+#ifdef PPP_SUPPORT
 
 /**
  * PPP_IPV6_SUPPORT == 1: Enable IPV6 support for local link
