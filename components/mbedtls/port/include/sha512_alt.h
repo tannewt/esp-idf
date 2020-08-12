@@ -30,7 +30,7 @@ extern "C" {
 
 #if defined(MBEDTLS_SHA512_ALT)
 
-#if CONFIG_IDF_TARGET_ESP32S2
+#ifdef CONFIG_IDF_TARGET_ESP32S2
 #include "esp32s2/sha.h"
 
 typedef enum {
@@ -66,7 +66,7 @@ void esp_sha512_set_t( mbedtls_sha512_context *ctx, uint16_t t_val);
 
 #endif //CONFIG_IDF_TARGET_ESP32S2
 
-#if CONFIG_IDF_TARGET_ESP32
+#ifdef CONFIG_IDF_TARGET_ESP32
 
 typedef enum {
     ESP_MBEDTLS_SHA512_UNUSED, /* first block hasn't been processed yet */

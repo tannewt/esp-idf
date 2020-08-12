@@ -161,14 +161,22 @@
  * this option does not affect outgoing packet sizes, which can be controlled
  * via IP_FRAG.
  */
+#ifdef CONFIG_LWIP_IP4_REASSEMBLY
 #define IP_REASSEMBLY                   CONFIG_LWIP_IP4_REASSEMBLY
+#else 
+#define IP_REASSEMBLY                   0
+#endif
 
 /**
  * LWIP_IPV6_REASS==1: reassemble incoming IP6 packets that fragmented. Note that
  * this option does not affect outgoing packet sizes, which can be controlled
  * via LWIP_IPV6_FRAG.
  */
+#ifdef CONFIG_LWIP_IP6_REASSEMBLY
 #define LWIP_IPV6_REASS                 CONFIG_LWIP_IP6_REASSEMBLY
+#else
+#define LWIP_IPV6_REASS                 0
+#endif
 
 /**
  * IP_FRAG==1: Fragment outgoing IP4 packets if their size exceeds MTU. Note
@@ -211,7 +219,11 @@
  * Note that both CONFIG_LWIP_IP_FORWARD and CONFIG_LWIP_L2_TO_L3_COPY options
  * need to be enabled in system configuration for the NAPT to work on ESP platform
  */
+#ifdef CONFIG_LWIP_IPV4_NAPT
 #define IP_NAPT                         CONFIG_LWIP_IPV4_NAPT
+#else
+#define IP_NAPT                         0
+#endif
 
 /*
    ----------------------------------
