@@ -281,6 +281,8 @@ esp_err_t jpeg_decoder_process(jpeg_decoder_handle_t decoder_engine, const jpeg_
 {
     ESP_RETURN_ON_FALSE(decoder_engine, ESP_ERR_INVALID_ARG, TAG, "jpeg decode handle is null");
     ESP_RETURN_ON_FALSE(decode_cfg, ESP_ERR_INVALID_ARG, TAG, "jpeg decode config is null");
+    ESP_RETURN_ON_FALSE(decode_cfg->yuv_range == COLOR_RANGE_LIMIT || decode_cfg->conv_std == JPEG_YUV_RGB_CONV_STD_BT601,
+                        ESP_ERR_NOT_SUPPORTED, TAG, "full range yuv is only supported with BT601");
     ESP_RETURN_ON_FALSE(decode_outbuf && outbuf_size, ESP_ERR_INVALID_ARG, TAG, "jpeg decode picture buffer is null");
 
     uint32_t outbuf_cache_line_size = esp_cache_get_line_size_by_addr(decode_outbuf);
@@ -307,6 +309,7 @@ esp_err_t jpeg_decoder_process(jpeg_decoder_handle_t decoder_engine, const jpeg_
     decoder_engine->output_format = decode_cfg->output_format;
     decoder_engine->rgb_order = decode_cfg->rgb_order;
     decoder_engine->conv_std = decode_cfg->conv_std;
+    decoder_engine->yuv_range = decode_cfg->yuv_range;
     decoder_engine->decoded_buf = decode_outbuf;
 
     ESP_GOTO_ON_ERROR(jpeg_parse_marker(decoder_engine, bit_stream, stream_size), err2, TAG, "jpeg parse marker failed");
@@ -577,13 +580,13 @@ static void jpeg_dec_config_dma_csc(jpeg_decoder_handle_t decoder_engine, dma2d_
     // Configure color space conversion option.
     if (decoder_engine->output_format == JPEG_DECODE_OUT_FORMAT_RGB565) {
         if (decoder_engine->conv_std == JPEG_YUV_RGB_CONV_STD_BT601) {
-            rx_csc_option = DMA2D_CSC_RX_YUV420_TO_RGB565_601;
+            rx_csc_option = decoder_engine->yuv_range == COLOR_RANGE_FULL ? DMA2D_CSC_RX_YUV420_TO_RGB565_601_FULL : DMA2D_CSC_RX_YUV420_TO_RGB565_601;
         } else if (decoder_engine->conv_std == JPEG_YUV_RGB_CONV_STD_BT709) {
             rx_csc_option = DMA2D_CSC_RX_YUV420_TO_RGB565_709;
         }
     } else if (decoder_engine->output_format == JPEG_DECODE_OUT_FORMAT_RGB888) {
         if (decoder_engine->conv_std == JPEG_YUV_RGB_CONV_STD_BT601) {
-            rx_csc_option = DMA2D_CSC_RX_YUV420_TO_RGB888_601;
+            rx_csc_option = decoder_engine->yuv_range == COLOR_RANGE_FULL ? DMA2D_CSC_RX_YUV420_TO_RGB888_601_FULL : DMA2D_CSC_RX_YUV420_TO_RGB888_601;
         } else if (decoder_engine->conv_std == JPEG_YUV_RGB_CONV_STD_BT709) {
             rx_csc_option = DMA2D_CSC_RX_YUV420_TO_RGB888_709;
         }

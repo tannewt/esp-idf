@@ -191,6 +191,15 @@ typedef enum {
     { 298,   516,     0,  -70836},                 \
 }
 
+// Full range BT601, as used by JFIF: R = Y + 1.402 (Cr - 128), G = Y - 0.344 (Cb - 128) - 0.714 (Cr - 128),
+// B = Y + 1.772 (Cb - 128), in 8.8 fixed point with rounding
+#define DMA2D_COLOR_SPACE_CONV_PARAM_YUV2RGB_BT601_FULL \
+{                                                  \
+    { 256,     0,   359,  -45824},                 \
+    { 256,   -88,  -183,   34816},                 \
+    { 256,   454,     0,  -57984},                 \
+}
+
 #define DMA2D_COLOR_SPACE_CONV_PARAM_YUV2RGB_BT709 \
 {                                                  \
     { 298,     0,   459,  -63367},                 \
@@ -241,6 +250,8 @@ typedef enum {
     DMA2D_CSC_RX_YUV444_TO_RGB565_601,          /*!< 2D-DMA RX perform YUV444-JPEG to RGB565 conversion (follow BT601 standard) */
     DMA2D_CSC_RX_YUV444_TO_RGB888_709,          /*!< 2D-DMA RX perform YUV444-JPEG to RGB888 conversion (follow BT709 standard) */
     DMA2D_CSC_RX_YUV444_TO_RGB565_709,          /*!< 2D-DMA RX perform YUV444-JPEG to RGB565 conversion (follow BT709 standard) */
+    DMA2D_CSC_RX_YUV420_TO_RGB888_601_FULL,     /*!< 2D-DMA RX perform YUV420-JPEG to RGB888 conversion (BT601, full range as in JFIF) */
+    DMA2D_CSC_RX_YUV420_TO_RGB565_601_FULL,     /*!< 2D-DMA RX perform YUV420-JPEG to RGB565 conversion (BT601, full range as in JFIF) */
     DMA2D_CSC_RX_INVALID,                       /*!< Invalid 2D-DMA RX color space conversion */
 } dma2d_csc_rx_option_t;
 
