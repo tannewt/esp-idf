@@ -22,6 +22,9 @@ typedef struct {
     jpeg_dec_output_format_t output_format;   /*!< JPEG decoder output format */
     jpeg_dec_rgb_element_order_t rgb_order;   /*!< JPEG decoder output order */
     jpeg_yuv_rgb_conv_std_t conv_std;         /*!< JPEG decoder yuv->rgb standard */
+    color_range_t yuv_range;                  /*!< YUV range of the JPEG for yuv->rgb. JFIF files are COLOR_RANGE_FULL.
+                                                   The default, COLOR_RANGE_LIMIT, keeps the earlier behavior.
+                                                   COLOR_RANGE_FULL is supported with BT601 only. */
 } jpeg_decode_cfg_t;
 
 /**

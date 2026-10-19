@@ -116,6 +116,7 @@ struct jpeg_decoder_t {
     jpeg_dec_output_format_t output_format;      // picture output format.
     jpeg_dec_rgb_element_order_t rgb_order;      // RGB pixel order
     jpeg_yuv_rgb_conv_std_t conv_std;            // YUV RGB conversion standard
+    color_range_t yuv_range;                     // YUV range for YUV RGB conversion
     bool no_color_conversion;                    // No color conversion, directly output based on compressed format
     uint8_t bit_per_pixel;                       // bit size per pixel
     QueueHandle_t evt_queue;                     // jpeg event from 2DDMA and JPEG engine
