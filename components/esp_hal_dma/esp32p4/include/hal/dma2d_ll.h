@@ -101,6 +101,7 @@ typedef enum {
 // COLOR SPACE CONVERSION TABLES
 extern const int dma2d_csc_param_yuv2rgb_bt601_table[3][4];
 extern const int dma2d_csc_param_yuv2rgb_bt709_table[3][4];
+extern const int dma2d_csc_param_yuv2rgb_bt601_full_table[3][4];
 extern const int dma2d_csc_param_rgb2yuv_bt601_table[3][4];
 extern const int dma2d_csc_param_rgb2yuv_bt709_table[3][4];
 
@@ -584,6 +585,18 @@ static inline void dma2d_ll_rx_configure_color_space_conv(dma2d_dev_t *dev, uint
         input_sel = 0;
         proc_en = true;
         table = dma2d_csc_param_yuv2rgb_bt601_table;
+        output_sel = 0;
+        break;
+    case DMA2D_CSC_RX_YUV420_TO_RGB888_601_FULL:
+        input_sel = 0;
+        proc_en = true;
+        table = dma2d_csc_param_yuv2rgb_bt601_full_table;
+        output_sel = 1;
+        break;
+    case DMA2D_CSC_RX_YUV420_TO_RGB565_601_FULL:
+        input_sel = 0;
+        proc_en = true;
+        table = dma2d_csc_param_yuv2rgb_bt601_full_table;
         output_sel = 0;
         break;
     case DMA2D_CSC_RX_YUV420_TO_RGB888_709:
