@@ -259,7 +259,7 @@ esp_err_t esp_cam_new_csi_ctlr(const esp_cam_ctlr_csi_config_t *config, esp_cam_
             .handshake_type = DW_GDMA_HANDSHAKE_HW,
             .num_outstanding_requests = 5,
         },
-        .flow_controller = DW_GDMA_FLOW_CTRL_SELF,
+        .flow_controller = DW_GDMA_FLOW_CTRL_SRC,
         .chan_priority = 1,
     };
     ESP_GOTO_ON_ERROR(dw_gdma_new_channel(&csi_dma_alloc_config, &csi_dma_chan), err, TAG, "failed to new dwgdma channel");
@@ -723,12 +723,12 @@ esp_err_t s_ctlr_csi_start(esp_cam_ctlr_handle_t handle)
 }
 
 // CIRCUITPY-CHANGE: request a stop at the end of the frame being captured and
-// return right away. The DMA must not stop mid-frame: it counts a fixed frame
-// size, so the rest of an interrupted frame would be left in the bridge and
-// shift every frame after the next start(). The completion ISR finishes the
-// stop at the frame boundary (the frame in flight still lands and is reported
-// through on_trans_finished). start() before then cancels the stop; stop()
-// waits for it.
+// return right away. The CSI bridge is the flow controller and tracks the
+// frame; stopping mid-frame would leave it mid-frame and shift every frame
+// after the next start(). The completion ISR finishes the stop at the frame
+// boundary (the frame in flight still lands and is reported through
+// on_trans_finished). start() before then cancels the stop; stop() waits for
+// it.
 esp_err_t esp_cam_ctlr_csi_stop_at_frame_end(esp_cam_ctlr_handle_t handle)
 {
     if (handle == NULL) {
